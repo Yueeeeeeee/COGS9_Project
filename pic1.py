@@ -38,7 +38,8 @@ countries['Moldova'] = 'MDA'
 countries['Bolivia'] = 'BOL'
 countries['F.S. Micronesia'] = 'FSM'
 countries['North Korea'] = 'PRK'
-countries['Czech Republic'] = 'CSE'
+countries['Slovak Republic'] = 'SVK'
+countries['Czech Republic'] = 'CZE'
 countries['Tanzania'] = 'TZA'
 countries['Laos'] = 'LAO'
 countries['Vietnam'] = 'VNM'
@@ -50,10 +51,14 @@ countries['São Tomé and Príncipe'] = 'STP'
 countries['Syria'] = 'SYR'
 countries['DR Congo'] = 'COD'
 
-data = pd.read_excel('data1.xlsx').values
+OECD = ['MEX', 'KOR', 'GRC', 'IND', 'CHL', 'RUS', 'POL', 'LVA', 'ISR', 'ISL', 'IRL', 'EST', 'PRT', 'USA', 'CZE', 'HUN', 'NZL', 'SVK',
+        'ITA', 'JPN', 'CAN', 'ESP', 'SVN', 'GBR', 'AUS', 'FIN', 'SWE', 'AUT', 'CHE', 'BEL', 'LUX', 'FRA', 'NLD', 'NOR', 'DNK', 'DEU']
+
+data_pic1 = pd.read_excel('data1.xlsx').values
 data1 = []
 data2 = []
-for i in data[:, 1]:
+
+for i in data_pic1[:, 1]:
     if i.endswith('[a]\xa0(more info)'):
         data1.append(i[:-15].strip())
     elif i.endswith('(more info)'):
@@ -66,14 +71,16 @@ for i in data[:, 1]:
 for i in data1:
     data2.append(countries[i])
 
-data[:, 1] = data1
-data[:, 2] = data2
+data_pic1[:, 1] = data1
+data_pic1[:, 2] = data2
 
-data = pd.DataFrame(data=data, columns=['Rank', 'Country', 'Code', 'Rate'])
+data_pic1 = pd.DataFrame(data=data_pic1, columns=[
+                         'Rank', 'Country', 'Code', 'Rate'])
+
 fig = go.Figure(data=go.Choropleth(
-    locations=data['Code'],
-    z=data['Rate'],
-    text=data['Country'],
+    locations=data_pic1['Code'],
+    z=data_pic1['Rate'],
+    text=data_pic1['Country'],
     colorscale='Blues',
     autocolorscale=False,
     reversescale=False,
@@ -96,5 +103,23 @@ fig = go.Figure(data=go.Choropleth(
 
 fig = px.choropleth(df1, locations="iso_alpha", color="suicides_no",
                     hover_name="country", color_continuous_scale=px.colors.sequential.Plasma) """
+
+fig.update_layout(
+    title_text='World Overview of Suicides in 100k Population by Country',
+    geo=dict(
+        showframe=False,
+        showcoastlines=False,
+        projection_type='equirectangular'
+    ),
+    annotations=[dict(
+        x=0.5,
+        y=0.2,
+        xref='paper',
+        yref='paper',
+        text='Source: <a href="https://en.wikipedia.org/wiki/List_of_countries_by_suicide_rate">\
+            Wikipedia</a>',
+        showarrow=False
+    )]
+)
 
 fig.show()

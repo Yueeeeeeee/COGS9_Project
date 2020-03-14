@@ -112,6 +112,34 @@ try:
 except:
     print('Insert done before!')
 
+data_pic4 = pd.read_excel('data4.xlsx').values
+gdp_ppp = defaultdict(float)
+for i in range(len(data_pic4)):
+    gdp_ppp[countries[data_pic4[i, 1].strip()]] = data_pic4[i, 2]
+
+data5 = []
+for i in data_pic2['Code']:
+    data5.append(gdp_ppp[i])
+
+try:
+    data_pic2.insert(6, 'GDP', data5)
+except:
+    print('Insert done before!')
+
+data_pic5 = pd.read_excel('data5.xlsx').values
+welfare = defaultdict(float)
+for i in range(len(data_pic5)):
+    welfare[countries[data_pic5[i, 1].strip()]] = data_pic5[i, 2]
+
+data5 = []
+for i in data_pic2['Code']:
+    data5.append(welfare[i])
+
+try:
+    data_pic2.insert(7, 'Welfare', data5)
+except:
+    print('Insert done before!')
+
 fig1 = go.Figure(data=go.Choropleth(
     locations=data_pic2['Code'],
     z=data_pic2['Rate'],
@@ -146,18 +174,18 @@ fig1.show()
 
 fig2 = go.Figure(data=go.Choropleth(
     locations=data_pic2['Code'],
-    z=data_pic2['Hours'],
+    z=data_pic2['GDP'],
     text=data_pic2['Country'],
     colorscale='Blues',
     autocolorscale=False,
     reversescale=False,
     marker_line_color='darkgray',
     marker_line_width=0.5,
-    colorbar_title='Hours',
+    colorbar_title='GDP in $',
 ))
 
 fig2.update_layout(
-    title_text='Annual Working Hours',
+    title_text='GDP per Capital (PPP)',
     geo=dict(
         showframe=False,
         showcoastlines=False,
@@ -168,7 +196,7 @@ fig2.update_layout(
         y=0.2,
         xref='paper',
         yref='paper',
-        text='Source: <a href="https://en.wikipedia.org/wiki/Working_time">\
+        text='Source: <a href="https://en.wikipedia.org/wiki/List_of_countries_by_GDP_(PPP)_per_capita">\
             Wikipedia</a>',
         showarrow=False
     )]
@@ -178,18 +206,18 @@ fig2.show()
 
 fig3 = go.Figure(data=go.Choropleth(
     locations=data_pic2['Code'],
-    z=data_pic2['Unemployment'],
+    z=data_pic2['Welfare'],
     text=data_pic2['Country'],
     colorscale='Blues',
     autocolorscale=False,
     reversescale=False,
     marker_line_color='darkgray',
     marker_line_width=0.5,
-    colorbar_title='Unemployment Rate',
+    colorbar_title='Social Welfare / GDP',
 ))
 
 fig3.update_layout(
-    title_text='Unemployment Rate',
+    title_text='Social Welfare as Percentage of GDP',
     geo=dict(
         showframe=False,
         showcoastlines=False,
@@ -200,7 +228,7 @@ fig3.update_layout(
         y=0.2,
         xref='paper',
         yref='paper',
-        text='Source: <a href="https://en.wikipedia.org/wiki/List_of_countries_by_unemployment_rate">\
+        text='Source: <a href="https://en.wikipedia.org/wiki/List_of_countries_by_social_welfare_spending">\
             Wikipedia</a>',
         showarrow=False
     )]
