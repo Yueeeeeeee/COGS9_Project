@@ -77,6 +77,13 @@ data_pic1[:, 2] = data2
 data_pic1 = pd.DataFrame(data=data_pic1, columns=[
                          'Rank', 'Country', 'Code', 'Rate'])
 
+data = pd.read_csv('master.csv')
+data = data[data['year'] < 2015]
+df0 = data[['year', 'suicides_no']]
+df0 = df0.groupby(['year'], as_index=False).agg({'suicides_no': 'sum'})
+df1 = data[['year', 'sex', 'suicides_no']]
+df1 = df1.groupby(['year', 'sex'], as_index=False).agg({'suicides_no': 'sum'})
+
 fig = go.Figure(data=go.Choropleth(
     locations=data_pic1['Code'],
     z=data_pic1['Rate'],
@@ -123,3 +130,81 @@ fig.update_layout(
 )
 
 fig.show()
+
+title = 'Total Suicides vs. Year'
+labels = ['Total', 'Male', 'Female']
+colors = ['rgb(115,115,115)', 'rgb(49,130,189)',
+          'rgb(189,189,189)']  # rgb(67,67,67)'
+
+mode_size = [12, 8, 8]
+line_size = [4, 2, 2]
+
+x_data = np.array([df0['year'], df0['year'], df0['year']])
+
+y_data = np.array([df0['suicides_no'].values, df1[df1['sex'] == 'male']
+                   ['suicides_no'].values, df1[df1['sex'] == 'female']['suicides_no'].values])
+
+fig1 = go.Figure()
+
+for i in range(0, 3):
+    fig1.add_trace(go.Scatter(x=x_data[i], y=y_data[i], mode='lines', name=labels[i], line=dict(
+        color=colors[i], width=line_size[i])))
+
+    # endpoints
+    fig1.add_trace(go.Scatter(x=[x_data[i][0], x_data[i][-1]], y=[y_data[i][0], y_data[i]
+                                                                  [-1]], mode='markers', marker=dict(color=colors[i], size=mode_size[i])))
+
+fig1.update_layout(
+    xaxis=dict(
+        showline=True,
+        showgrid=False,
+        showticklabels=True,
+        linecolor='rgb(204, 204, 204)',
+        linewidth=2,
+        ticks='outside',
+        tickfont=dict(
+            family='Arial',
+            size=12,
+            color='rgb(82, 82, 82)',
+        ),
+    ),
+    yaxis=dict(
+        showgrid=False,
+        zeroline=False,
+        showline=False,
+        showticklabels=False,
+    ),
+    autosize=True,
+    margin=dict(
+        autoexpand=False,
+        l=100,
+        r=20,
+        t=110,
+    ),
+    showlegend=False,
+    plot_bgcolor='white'
+)
+
+annotations = []
+
+# Adding labels
+for y_trace, label, color in zip(y_data, labels, colors):
+    # labeling the left_side of the plot
+    annotations.append(dict(xref='paper', x=0.05, y=y_trace[0], xanchor='right', yanchor='middle',
+                            text=label + ' {}'.format(y_trace[0]), font=dict(family='Arial', size=16), showarrow=False))
+    # labeling the right_side of the plot
+    annotations.append(dict(xref='paper', x=0.95, y=y_trace[11], xanchor='left', yanchor='middle',
+                            text='{}'.format(y_trace[11]), font=dict(family='Arial', size=16), showarrow=False))
+
+annotations.append(dict(x=0.5, y=0.2, xref='paper', yref='paper',
+                        text='Source: <a href="https://www.kaggle.com/russellyates88/suicide-rates-overview-1985-to-2016"> Kaggle</a>',
+                        showarrow=False))
+
+fig1.update_layout(title_text='Total Suicides vs. Year',
+                   geo=dict(
+                       showframe=False,
+                       showcoastlines=False,
+                       projection_type='equirectangular'
+                   ), annotations=annotations)
+
+fig1.show()
