@@ -1,4 +1,3 @@
 # COGS9_Project
 
-Run picx.py to generate interactive web visualizations
-Run algo.ipynb to see analysis and static images
+Run picx.py to generate interactive web visualizations, run Algo.ipynb to see analysis and static images
