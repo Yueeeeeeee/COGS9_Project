@@ -54,7 +54,7 @@ countries['DR Congo'] = 'COD'
 OECD = ['MEX', 'KOR', 'GRC', 'IND', 'CHL', 'RUS', 'POL', 'LVA', 'ISR', 'ISL', 'IRL', 'EST', 'PRT', 'USA', 'CZE', 'HUN', 'NZL', 'SVK',
         'ITA', 'JPN', 'CAN', 'ESP', 'SVN', 'GBR', 'AUS', 'FIN', 'SWE', 'AUT', 'CHE', 'BEL', 'LUX', 'FRA', 'NLD', 'NOR', 'DNK', 'DEU']
 
-data_pic1 = pd.read_excel('data1.xlsx').values
+data_pic1 = pd.read_excel('rate.xlsx').values
 data1 = []
 data2 = []
 
@@ -77,7 +77,7 @@ data_pic1[:, 2] = data2
 data_pic1 = pd.DataFrame(data=data_pic1, columns=[
                          'Rank', 'Country', 'Code', 'Rate'])
 
-data_pic2 = pd.read_excel('data2.xlsx').values
+data_pic2 = pd.read_excel('hours.xlsx').values
 data1 = []
 data2 = []
 data3 = []
@@ -98,7 +98,7 @@ data_pic2[:, 4] = data3
 data_pic2 = pd.DataFrame(data=data_pic2, columns=[
                          'Rank', 'Country', 'Code', 'Hours', 'Rate'])
 
-data_pic3 = pd.read_excel('data3.xlsx').values
+data_pic3 = pd.read_excel('unemployment.xlsx').values
 unemployment = defaultdict(float)
 for i in range(len(data_pic3)):
     unemployment[countries[data_pic3[i, 1].strip()]] = data_pic3[i, 2]

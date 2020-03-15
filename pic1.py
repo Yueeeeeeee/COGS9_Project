@@ -54,7 +54,7 @@ countries['DR Congo'] = 'COD'
 OECD = ['MEX', 'KOR', 'GRC', 'IND', 'CHL', 'RUS', 'POL', 'LVA', 'ISR', 'ISL', 'IRL', 'EST', 'PRT', 'USA', 'CZE', 'HUN', 'NZL', 'SVK',
         'ITA', 'JPN', 'CAN', 'ESP', 'SVN', 'GBR', 'AUS', 'FIN', 'SWE', 'AUT', 'CHE', 'BEL', 'LUX', 'FRA', 'NLD', 'NOR', 'DNK', 'DEU']
 
-data_pic1 = pd.read_excel('data1.xlsx').values
+data_pic1 = pd.read_excel('rate.xlsx').values
 data1 = []
 data2 = []
 
