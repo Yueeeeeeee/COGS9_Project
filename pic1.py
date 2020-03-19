@@ -124,7 +124,7 @@ fig.update_layout(
         xref='paper',
         yref='paper',
         text='Source: <a href="https://en.wikipedia.org/wiki/List_of_countries_by_suicide_rate">\
-            Wikipedia</a>',
+            Kaggle & Wikipedia</a>',
         showarrow=False
     )]
 )
